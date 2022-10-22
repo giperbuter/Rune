@@ -1,0 +1,7 @@
+[
+    {"type": "player", "main": true, "pos": {"pos": [0, -2], "grid": true}},
+    {"type": "jelly", "pos": {"pos": [5, -3], "grid": true}},
+    {"type": "ground", "sprite": "random", "pos": {"pos": [0, 0, 3, 0], "grid": true}},
+    {"type": "ground", "sprite": "random", "pos": {"pos": [4, -1, 8, -1], "grid": true}},
+    {"type": "ground", "sprite": "random", "pos": {"pos": [9, -2, 13, -2], "grid": true}}
+]
