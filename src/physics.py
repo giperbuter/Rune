@@ -6,7 +6,7 @@ from data import *
 # acos(v1.normalize().dot(v2.normalize()))
 
 
-class PhysicsState():
+class PhysicsComponent():
 	def __init__(s, obj, dynamic = False, mass = 1, collideGroups=[], frictionGroups={"air": -0.7}):
 		s.obj = obj
 		s.frc = vec(0, 0)
@@ -36,9 +36,9 @@ class PhysicsState():
 		for g in s.collideGroups:
 			if hits := pg.sprite.spritecollide(s.obj, g, False):
 				s.collided.append(g)
-				if hits[0].phST.dyn:
-					s.vel.x = ((hits[0].phST.mas * hits[0].phST.vel.x) + (s.mas * s.vel.x)) / (hits[0].phST.mas + s.mas)
-					hits[0].phST.vel.x = s.vel.x
+				if hits[0].phCO.dyn:
+					s.vel.x = ((hits[0].phCO.mas * hits[0].phCO.vel.x) + (s.mas * s.vel.x)) / (hits[0].phCO.mas + s.mas)
+					hits[0].phCO.vel.x = s.vel.x
 				
 				if s.vel.x > 0:  # right
 					s.obj.rect.right = hits[0].rect.left
@@ -55,9 +55,9 @@ class PhysicsState():
 		for g in s.collideGroups:
 			if hits := pg.sprite.spritecollide(s.obj, g, False):
 				s.collided.append(g)
-				if hits[0].phST.dyn:
-					s.vel.y = ((hits[0].phST.mas * hits[0].phST.vel.y) + (s.mas * s.vel.y)) / (hits[0].phST.mas + s.mas)
-					hits[0].phST.vel.y = s.vel.y
+				if hits[0].phCO.dyn:
+					s.vel.y = ((hits[0].phCO.mas * hits[0].phCO.vel.y) + (s.mas * s.vel.y)) / (hits[0].phCO.mas + s.mas)
+					hits[0].phCO.vel.y = s.vel.y
 				
 				if s.vel.y > 0:  # down
 					s.obj.rect.bottom = hits[0].rect.top

@@ -6,6 +6,10 @@ import IO as io
 
 # more triggers - key down key up key press mouse click, object collide with, object collided on top etc...
 # dynamic scroll - an object can control if a scroll applies to it and wihch one(game world, ui menu etc)
+# text support - object that accepts str as argument and optionaly the images for the lettres, 
+#                and other things like width between letters, space width line height text size etc
+# particles - object that ommits configurable particles (shape color texture size etc)
+# sound system - start with research and move from there
 
 class Main:
     def __init__(s):

@@ -109,6 +109,6 @@ class RenderSystem:
 
 	def render(s, screen, objects):
 		for obj in objects:
-			if not obj.rdST.stopAnimation:
-				screen.blit(obj.rdST.animation.images[obj.rdST.currentTexture], (
+			if not obj.rdCO.stopAnimation:
+				screen.blit(obj.rdCO.animation.images[obj.rdCO.currentTexture], (
 					obj.rect.x-s.scroll.x, obj.rect.y-s.scroll.y))
