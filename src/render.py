@@ -28,8 +28,9 @@ class Animation:
 
 
 class RenderComponent:
-	def __init__(s, obj, animation):
+	def __init__(s, obj, animation, offset):
 		s.obj = obj
+		s.offset = offset
 		s.setAnimation(animation)
 
 	def setAnimation(s, animation):
@@ -51,6 +52,9 @@ class RenderComponent:
 			s.animation = animations[animation]
 		elif type(animation) == Animation:
 			s.animation = animation
+		elif type(animation) == int:
+			s.animation = "custom"
+
 
 	def getSpriteRect(s):
 		return s.animation.images[s.currentTexture].get_rect()
@@ -72,8 +76,7 @@ class RenderComponent:
 class RenderSystem:
 	def __init__(s):
 		s.scroll = vec(0, 0)
-		s.focuseObjct = None
-
+  
 		animations["ghost idle"] = Animation(
 			importImages(["ghost/idle-1.png"], 40, 54), 0, False)
 		animations["ghost left"] = Animation(
@@ -102,19 +105,17 @@ class RenderSystem:
 			[], 0, False
 		)
 
-	def focuseObject(s, obj):
-		s.focuseObjct = obj
-
 	def update(s, dt):
-		s.scroll.x += (s.focuseObjct.rect.x-s.scroll.x -
-					WIN_WIDTH/2+s.focuseObjct.rect.width/2)/4 * dt
-		s.scroll.y += (s.focuseObjct.rect.y-s.scroll.y -
-					WIN_HEIGHT/2+s.focuseObjct.rect.height/2)/4 * dt
+		for o in offsets.values():
+			o[0].x += (o[1].rect.x-o[0].x -
+						WIN_WIDTH/2+o[1].rect.width/2)/1 * dt
+			o[0].y += (o[1].rect.y-o[0].y -
+						WIN_HEIGHT/2+o[1].rect.height/2)/1 * dt
 
 	def render(s, screen, objects):
 		for obj in objects:
 			if obj.rdCO.animation == "custom":
-				obj.draw(screen, s.scroll)
+				obj.draw(screen, obj.rdCO.offset[0])
 			elif not obj.rdCO.stopAnimation:
 				screen.blit(obj.rdCO.animation.images[obj.rdCO.currentTexture], (
-					obj.rect.x-s.scroll.x, obj.rect.y-s.scroll.y))
+					obj.rect.x-obj.rdCO.offset[0].x, obj.rect.y-obj.rdCO.offset[0].y))

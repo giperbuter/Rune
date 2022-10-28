@@ -23,7 +23,7 @@ class PhysicsComponent():
     force = vec(0, 0)
     force.y = sin(angle) * vel
     force.x = cos(angle) * vel
-    s.frc += vec(force.x+s.frc.x/2, force.y+s.frc.y/2) / s.mas
+    s.frc += vec(force.x, force.y) / s.mas
       
   def pushV(s, vec):
     s.frc += vec

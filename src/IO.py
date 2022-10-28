@@ -30,7 +30,7 @@ def importLevel(path):
 		# player
 		if o["type"] == "player":
 			pos(lambda pos : ob.Player(pos))
-			if o["main"]: da.currentPlayer = groups["all"].sprites()[-1]
+			if o["main"]: offsets["level"][1] = groups["all"].sprites()[-1]
 
 		# jelly
 		elif o["type"] == "jelly":
@@ -47,6 +47,3 @@ def importLevel(path):
 					ob.NoLogic(pos, groups["all", "ground"], animations["ground-1"])
 					
 			pos(create)
-   
-	# state = em.EmitterState("circle", (255, 255, 255), [2, 5], [0.5, 80], [0.2, 0.5], [0, 2*pi])
-	# em.Emitter(state, pg.Rect(100, 100, 48, 48), -1, 12)

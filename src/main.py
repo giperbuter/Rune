@@ -4,25 +4,21 @@ import data as da
 import render as rd
 import IO as io
 
-# more triggers - key down key up key press mouse click, object collide with, object collided on top etc...
-# dynamic scroll - an object can control if a scroll applies to it and wihch one(game world, ui menu etc)
+# more triggers - key down key up key press mouse click multiple-keys, object collide with, object collided on top etc...
 # text support - object that accepts str as argument and optionaly the images for the lettres, 
 #                and other things like width between letters, space width line height text size etc
 # sound system - start with research and move from there
-# particles - texture and square and polygon support, fix if emitEvery bigger than dt
+# particles - texture and square and polygon support
 
 class Main:
     def __init__(s):
         pg.init()
         s.screen = pg.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pg.HWSURFACE | pg.DOUBLEBUF)
-        # s.clock = pg.time.Clock()
         s.running = True
         s.elapsed = 1 / 60.0
-        # s.dt = 1 / 60.0
         s.currentTime = pg.time.get_ticks() / 100.0
         s.rdSY = rd.RenderSystem()
         io.importLevel("level1.json")
-        s.rdSY.focuseObject(da.currentPlayer)
     
     def inputs(s):
         for event in pg.event.get():
@@ -58,7 +54,6 @@ class Main:
             s.rdSY.render(s.screen, groups["all"])
             pg.display.flip()
             
-            # dt = (s.clock.get_time() - start) / 1000.0
             # pg.display.set_caption(f"{dt:.2f}")
 
 

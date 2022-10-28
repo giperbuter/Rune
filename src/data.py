@@ -29,4 +29,5 @@ def trigger(key, func):
 groups = groups("all", "update", "player", "ground", "jelly", "particle")
 currentPlayer = None
 
+offsets = {"level": [vec(0, 0), None]}
 animations = {}
