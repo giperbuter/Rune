@@ -8,17 +8,18 @@ import IO as io
 # dynamic scroll - an object can control if a scroll applies to it and wihch one(game world, ui menu etc)
 # text support - object that accepts str as argument and optionaly the images for the lettres, 
 #                and other things like width between letters, space width line height text size etc
-# particles - object that ommits configurable particles (shape color texture size etc)
 # sound system - start with research and move from there
+# particles - texture and square and polygon support, fix if emitEvery bigger than dt
 
 class Main:
     def __init__(s):
         pg.init()
         s.screen = pg.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pg.HWSURFACE | pg.DOUBLEBUF)
-        s.Clock = pg.time.Clock()
+        # s.clock = pg.time.Clock()
         s.running = True
-        s.dt = 1 / 60.0
-        s.currentTime = pg.time.get_ticks() / 1000.0
+        s.elapsed = 1 / 60.0
+        # s.dt = 1 / 60.0
+        s.currentTime = pg.time.get_ticks() / 100.0
         s.rdSY = rd.RenderSystem()
         io.importLevel("level1.json")
         s.rdSY.focuseObject(da.currentPlayer)
@@ -35,21 +36,21 @@ class Main:
             if keys[key]:
                 triggers[key](key)
 
-    def update(s):
+    def update(s, dt):
         for obj in groups["update"]:
-            obj.update(s.dt)
-        s.rdSY.update(s.dt)
+            obj.update(dt)
+        s.rdSY.update(dt)
 
     def run(s):
         while s.running:
-            newTime = pg.time.get_ticks() / 1000.0
+            newTime = pg.time.get_ticks() / 100.0
             frameTime = newTime - s.currentTime
             s.currentTime = newTime
             
             while frameTime > 0.0:
-                deltaTime = min( frameTime, s.dt );
+                deltaTime = min( frameTime, s.elapsed );
                 s.inputs()
-                s.update()
+                s.update(frameTime)
                 frameTime -= deltaTime;
             
             
@@ -57,7 +58,8 @@ class Main:
             s.rdSY.render(s.screen, groups["all"])
             pg.display.flip()
             
-            pg.display.set_caption(f"{1 / s.dt:.2f}")
+            # dt = (s.clock.get_time() - start) / 1000.0
+            # pg.display.set_caption(f"{dt:.2f}")
 
 
 main = Main()

@@ -26,7 +26,7 @@ triggers = {}
 def trigger(key, func):
     triggers[key] = func
 
-groups = groups("all", "update", "player", "ground", "jelly")
+groups = groups("all", "update", "player", "ground", "jelly", "particle")
 currentPlayer = None
 
 animations = {}

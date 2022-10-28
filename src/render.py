@@ -1,5 +1,7 @@
+from turtle import window_width
 import pygame as pg
 import os.path as op
+from math import copysign, sqrt
 from data import *
 
 
@@ -25,7 +27,7 @@ class Animation:
 			s.noAnimation: bool = False
 
 
-class RenderState:
+class RenderComponent:
 	def __init__(s, obj, animation):
 		s.obj = obj
 		s.setAnimation(animation)
@@ -38,6 +40,8 @@ class RenderState:
 			s.animation = animations[animation]
 		elif type(animation) == Animation:
 			s.animation = animation
+		elif type(animation) == int:
+			s.animation = "custom"
 
 	def setAnimationNoReset(s, animation):
 		if s.currentTexture > len(animation.images):
@@ -103,12 +107,14 @@ class RenderSystem:
 
 	def update(s, dt):
 		s.scroll.x += (s.focuseObjct.rect.x-s.scroll.x -
-					WIN_WIDTH/2+s.focuseObjct.rect.width/2)/8 * dt# * 15
+					WIN_WIDTH/2+s.focuseObjct.rect.width/2)/4 * dt
 		s.scroll.y += (s.focuseObjct.rect.y-s.scroll.y -
-					WIN_HEIGHT/2+s.focuseObjct.rect.height/2)/8 * dt# * 15
+					WIN_HEIGHT/2+s.focuseObjct.rect.height/2)/4 * dt
 
 	def render(s, screen, objects):
 		for obj in objects:
-			if not obj.rdCO.stopAnimation:
+			if obj.rdCO.animation == "custom":
+				obj.draw(screen, s.scroll)
+			elif not obj.rdCO.stopAnimation:
 				screen.blit(obj.rdCO.animation.images[obj.rdCO.currentTexture], (
 					obj.rect.x-s.scroll.x, obj.rect.y-s.scroll.y))

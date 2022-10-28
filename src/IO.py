@@ -1,11 +1,11 @@
 import pygame as pg
+from math import pi
 import os.path as op
 import json
 from data import *
 import data as da
 import objects as ob
 import random as ra
-
 
 def importLevel(path):
 	level = json.load(open(op.join("data/json/", path)))
@@ -18,8 +18,8 @@ def importLevel(path):
 				else:
 					call(vec(o["pos"]["pos"]))
 			elif len(o["pos"]["pos"]) == 4:
-				for x in range(o["pos"]["pos"][0], o["pos"]["pos"][2]+1):
-					for y in range(o["pos"]["pos"][1], o["pos"]["pos"][3]+1):
+				for x in range(min(o["pos"]["pos"][0],o["pos"]["pos"][2]), max(o["pos"]["pos"][0],o["pos"]["pos"][2])+1):
+					for y in range(min(o["pos"]["pos"][1],o["pos"]["pos"][3]), max(o["pos"]["pos"][1],o["pos"]["pos"][3])+1):
 						if o["pos"]["grid"]:
 							call(vec(x, y) * 48)
 						else:
@@ -47,3 +47,6 @@ def importLevel(path):
 					ob.NoLogic(pos, groups["all", "ground"], animations["ground-1"])
 					
 			pos(create)
+   
+	# state = em.EmitterState("circle", (255, 255, 255), [2, 5], [0.5, 80], [0.2, 0.5], [0, 2*pi])
+	# em.Emitter(state, pg.Rect(100, 100, 48, 48), -1, 12)
