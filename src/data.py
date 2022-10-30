@@ -22,9 +22,33 @@ class groups(dict):
         else:
             return super().__getitem__(keys)
 
-triggers = {}
-def trigger(key, func):
+triggers = {"key press": []}
+def triggerKeyPress(key, func): # func(key)
     triggers[key] = func
+def triggerKeyUp(key, func): # func(key)
+    pass
+def triggerKeyDown(key, func): # func(key)
+    pass
+def triggerKeysPress(keys, func): # func(keys: [])
+    pass
+def triggerKeysUp(keys, func): # func(keys)
+    pass
+def triggerKeysDown(keys, func): # func(keys)
+    pass
+def mouseClick(button, func): # func(button, pos)
+    pass
+def mouseHover(obj, func): # func(obj, pos)
+    pass
+def mouseHoverClick(obj, button, func): # func(obj, pos, button)
+    pass
+def mouseScroll(func): # func(obj, pos, scroll)
+    pass
+def mouseHoverScroll(obj, func): # func(obj, pos, scroll)
+    pass
+def collide(obj, group, func): # func(obj, group, side)
+    pass
+def touch(obj, group, func): # func(obj, group, side)
+    pass
 
 groups = groups("all", "update", "player", "ground", "jelly", "particle", "text")
 currentPlayer = None

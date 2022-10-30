@@ -26,7 +26,7 @@ class Player(obj):
             else:
                 s.phCO.push(0, 0.4)
             s.rdCO.setAnimationNoReset(animations["ghost right"])
-        trigger(pg.K_d, left)
+        triggerKeyPress(pg.K_d, left)
 
         def right(key):
             if s.phCO.onFloor:
@@ -34,12 +34,12 @@ class Player(obj):
             else:
                 s.phCO.push(pi, 0.4)
             s.rdCO.setAnimationNoReset(animations["ghost left"])
-        trigger(pg.K_a, right)
+        triggerKeyPress(pg.K_a, right)
 
         def jump(key):
             if s.phCO.onFloor and s.jumpTimer == 0:
                 s.jumpTimer = 2
-        trigger(pg.K_SPACE, jump)
+        triggerKeyPress(pg.K_SPACE, jump)
 
     def update(s, dt):
         # jump

@@ -4,7 +4,7 @@ import data as da
 import render as rd
 import IO as io
 
-# more triggers - key down key up key press mouse click multiple-keys, object collide with, object collided on top etc...
+# triggers - already wrote which
 # sound system - start with research and move from there
 # particles - texture and square and polygon support
 # jelly ai
