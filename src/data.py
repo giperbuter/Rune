@@ -26,8 +26,12 @@ triggers = {}
 def trigger(key, func):
     triggers[key] = func
 
-groups = groups("all", "update", "player", "ground", "jelly", "particle")
+groups = groups("all", "update", "player", "ground", "jelly", "particle", "text")
 currentPlayer = None
 
-offsets = {"level": [vec(0, 0), None]}
+class position(obj):
+    def __init__(s, pos):
+        s.rect = pg.Rect(pos.x, pos.y, 0, 0)
+
+offsets = {"level": [vec(0, 0), None], "screen": [vec(0, 0), position(vec(0, 0))]}
 animations = {}

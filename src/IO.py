@@ -7,6 +7,8 @@ import data as da
 import objects as ob
 import random as ra
 
+# call pos once at the end and the create func is created before it depending on the type(with default error type)
+
 def importLevel(path):
 	level = json.load(open(op.join("data/json/", path)))
 	for o in level:
@@ -45,5 +47,9 @@ def importLevel(path):
 					ob.NoLogic(pos, groups["all", "ground"], animations["ground-"+int(o["sprite"])])
 				else:
 					ob.NoLogic(pos, groups["all", "ground"], animations["ground-1"])
-					
+			pos(create)
+   
+		elif o["type"] == "text":
+			def create(pos):
+				ob.Text(o["text"], o["font"], o["color"], pos)
 			pos(create)

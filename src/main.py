@@ -5,10 +5,9 @@ import render as rd
 import IO as io
 
 # more triggers - key down key up key press mouse click multiple-keys, object collide with, object collided on top etc...
-# text support - object that accepts str as argument and optionaly the images for the lettres, 
-#                and other things like width between letters, space width line height text size etc
 # sound system - start with research and move from there
 # particles - texture and square and polygon support
+# jelly ai
 
 class Main:
     def __init__(s):
@@ -31,6 +30,9 @@ class Main:
         for key in triggers:
             if keys[key]:
                 triggers[key](key)
+        #multiple keys
+        #key press/up/down
+        #muse
 
     def update(s, dt):
         for obj in groups["update"]:

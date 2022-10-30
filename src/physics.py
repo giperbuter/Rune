@@ -93,5 +93,7 @@ class PhysicsComponent():
     s.onFloor = False
     s.collided = []
     s.collide()
+    # collide with groups
+    # collide side and groups
 
     s.frc = vec(0, 0)

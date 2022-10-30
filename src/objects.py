@@ -87,6 +87,17 @@ class particle(obj):
     def draw(s, screen, scroll):
         pg.draw.circle(screen, s.color, s.pos - scroll, s.time)
 
+class Text(obj):
+    def __init__(s, text, font, color, topleft):
+        super().__init__(groups["all", "text"])
+        s.font = pg.font.SysFont(font, 16)
+        s.image = s.font.render(text, True, color)
+        s.rdCO = rd.RenderComponent(s, 0, "screen")
+        s.pos = topleft
+        
+    def draw(s, screen, scroll):
+        screen.blit(s.image, s.pos)
+
 class Jelly(obj):
     def __init__(s, pos):
         super().__init__(groups["all", "update", "jelly"])

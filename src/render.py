@@ -108,9 +108,9 @@ class RenderSystem:
 	def update(s, dt):
 		for o in offsets.values():
 			o[0].x += (o[1].rect.x-o[0].x -
-						WIN_WIDTH/2+o[1].rect.width/2)/1 * dt
+						WIN_WIDTH/2+o[1].rect.width/2)/3 * dt
 			o[0].y += (o[1].rect.y-o[0].y -
-						WIN_HEIGHT/2+o[1].rect.height/2)/1 * dt
+						WIN_HEIGHT/2+o[1].rect.height/2)/3 * dt
 
 	def render(s, screen, objects):
 		for obj in objects:
