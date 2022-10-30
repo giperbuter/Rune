@@ -91,9 +91,16 @@ class Text(obj):
     def __init__(s, text, font, color, topleft):
         super().__init__(groups["all", "text"])
         s.font = pg.font.SysFont(font, 16)
+        s.color = color
+        s.pos = topleft
         s.image = s.font.render(text, True, color)
         s.rdCO = rd.RenderComponent(s, 0, "screen")
-        s.pos = topleft
+    
+    def set(s, text):
+        s.image = s.font.render(text, True, s.color)
+    
+    def pos(s, pos):
+        s.pos = pos
         
     def draw(s, screen, scroll):
         screen.blit(s.image, s.pos)
@@ -104,9 +111,36 @@ class Jelly(obj):
 
         s.rdCO = rd.RenderComponent(s, "jelly idle", offsets["level"])
         s.rect = pg.Rect(pos.x, pos.y, *s.rdCO.getSpriteRect().size)
-        s.phCO = ph.PhysicsComponent(s, True, 0.1, groups["player", "ground"])
+        s.phCO = ph.PhysicsComponent(s, True, 0.7, groups["player", "ground"])
+        
+        s.jumpTimer = 0
+        
+        def right(key):
+            if s.phCO.onFloor:
+                s.phCO.push(0, 0.4)
+            else:
+                s.phCO.push(0, 0.2)
+        triggerKeyPress(pg.K_RIGHT, right)
+
+        def left(key):
+            if s.phCO.onFloor:
+                s.phCO.push(pi, 0.4)
+            else:
+                s.phCO.push(pi, 0.2)
+        triggerKeyPress(pg.K_LEFT, left)
+        
+        def jump(key):
+            if s.phCO.onFloor and s.jumpTimer == 0:
+                s.jumpTimer = 3
+        triggerKeyPress(pg.K_UP, jump)
 
     def update(s, dt):
+        # jump
+        if s.jumpTimer > 0:
+            s.phCO.push(3*pi/2, 1.4)
+            s.jumpTimer -= dt
+            if s.jumpTimer < 0:
+                s.jumpTimer = 0
         s.rdCO.update(dt)
         s.phCO.push(pi/2, 1)
         s.phCO.update(dt)

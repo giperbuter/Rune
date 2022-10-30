@@ -4,7 +4,7 @@ import data as da
 import render as rd
 import IO as io
 
-# triggers - already wrote which
+# triggers - already wrote which only need to do
 # sound system - start with research and move from there
 # particles - texture and square and polygon support
 # jelly ai
@@ -21,15 +21,32 @@ class Main:
     
     def inputs(s):
         for event in pg.event.get():
-            if event.type == pg.QUIT:
+            # mouse move
+            if event.type == pg.MOUSEMOTION:
+                for f in triggers["mouse move"]:
+                    f(vec(event.pos))
+            # mouse move
+            if event.type == pg.MOUSEWHEEL:
+                for f in triggers["mouse scroll"]:
+                    f(vec(event.x, event.y))
+            # key down
+            elif event.type == pg.KEYDOWN:
+                if event.key in triggers["key down"]:
+                    triggers["key down"][event.key](event.key)
+            # key up
+            elif event.type == pg.KEYUP:
+                if event.key in triggers["key up"]:
+                    triggers["key up"][event.key](event.key)
+            elif event.type == pg.QUIT:
                 s.running = False
-                
+        # key pressed
         keys = pg.key.get_pressed()
         if keys[pg.K_ESCAPE]:
             s.running = False
-        for key in triggers:
-            if keys[key]:
-                triggers[key](key)
+        for k in triggers["key press"].keys():
+            if keys[k]:
+                triggers["key press"][k](k)
+
         #multiple keys
         #key press/up/down
         #muse
@@ -56,7 +73,7 @@ class Main:
             s.rdSY.render(s.screen, groups["all"])
             pg.display.flip()
             
-            # pg.display.set_caption(f"{dt:.2f}")
+            pg.display.set_caption(f"{frameTime:.2f}")
 
 
 main = Main()
