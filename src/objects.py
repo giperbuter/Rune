@@ -1,4 +1,4 @@
-from math import pi, cos, sin
+from math import pi
 import random as ra
 import pygame as pg
 from data import *
@@ -11,72 +11,73 @@ class Player(obj):
     def __init__(s, pos):
         super().__init__(groups["all", "update", "player"])
 
-        s.rdCO = rd.RenderComponent(s, "ghost idle", offsets["level"])
-        s.rect = pg.Rect(pos.x, pos.y, *s.rdCO.getSpriteRect().size)
-        s.phCO = ph.PhysicsComponent(s, True, 1, groups["ground", "jelly"],
+        s.rdCM = rd.RenderComponent(s, "ghost idle", offsets["level"])
+        s.rect = pg.Rect(pos.x, pos.y, *s.rdCM.getSpriteRect().size)
+        s.phCM = ph.PhysicsComponent(s, True, 1, groups["ground", "jelly"],
                                      {"air": -0.7, groups["jelly"]: -0.7})
-
-        s.jumpTimer = 0
-
-        # trigger(pg.K_w, lambda key: s.phCO.push(3*pi/2, 1))
         
+        s.velText = Text("player velocity", "Comic Sans MS", WHITE, (10, 10))
+        s.jumpTimer = 0
+        s.setTrigers()
+        
+    def setTrigers(s):
         def left(key):
-            if s.phCO.onFloor:
-                s.phCO.push(0, 0.8)
+            if s.phCM.onFloor:
+                s.phCM.push(0, 0.8)
             else:
-                s.phCO.push(0, 0.4)
-            s.rdCO.setAnimationNoReset(animations["ghost right"])
+                s.phCM.push(0, 0.4)
+            s.rdCM.setAnimationNoReset(animations["ghost right"])
         triggerKeyPress(pg.K_d, left)
 
         def right(key):
-            if s.phCO.onFloor:
-                s.phCO.push(pi, 0.8)
+            if s.phCM.onFloor:
+                s.phCM.push(pi, 0.8)
             else:
-                s.phCO.push(pi, 0.4)
-            s.rdCO.setAnimationNoReset(animations["ghost left"])
+                s.phCM.push(pi, 0.4)
+            s.rdCM.setAnimationNoReset(animations["ghost left"])
         triggerKeyPress(pg.K_a, right)
 
         def jump(key):
-            if s.phCO.onFloor and s.jumpTimer == 0:
+            if s.phCM.onFloor and s.jumpTimer == 0:
                 s.jumpTimer = 2
         triggerKeyPress(pg.K_SPACE, jump)
-
+        
     def update(s, dt):
         # jump
         if s.jumpTimer > 0:
-            s.phCO.push(3*pi/2, 2)
+            s.phCM.push(3*pi/2, 2)
             s.jumpTimer -= dt
             if s.jumpTimer < 0:
                 s.jumpTimer = 0
         # emit particles
-        if abs(s.phCO.vel.x) > 0.3 or abs(s.phCO.vel.y) > 0.3:
-            particle(
+        if abs(s.phCM.vel.x) > 0.3 or abs(s.phCM.vel.y) > 0.3:
+            Particle(
                 vec(ra.randint(s.rect.left, s.rect.right), ra.randint(s.rect.top, s.rect.bottom)), 
                 vec(0, 0), ra.uniform(1, 4), (200, 200, 200))
         # animation
-        if s.phCO.frc == vec(0, 0):
-            s.rdCO.setAnimationNoReset(animations["ghost idle"])
-        s.rdCO.update(dt)
-        s.phCO.push(pi/2, 1)
-        s.phCO.update(dt)
-
+        if s.phCM.frc == vec(0, 0):
+            s.rdCM.setAnimationNoReset(animations["ghost idle"])
+        s.rdCM.update(dt)
+        s.phCM.push(pi/2, 1)
+        s.phCM.update(dt)
+        s.velText.set(f"Player: {s.phCM.vel.x:.4f}" + " " + f"{s.phCM.vel.y:.4f}")
 
 class NoLogic(obj):
     def __init__(s, pos, groups, animation):
         super().__init__(groups)
 
-        s.rdCO = rd.RenderComponent(s, animation, offsets["level"])
-        s.rect = pg.Rect(pos.x, pos.y, *s.rdCO.getSpriteRect().size)
-        s.phCO = ph.PhysicsComponent(s)
+        s.rdCM = rd.RenderComponent(s, animation, offsets["level"])
+        s.rect = pg.Rect(pos.x, pos.y, *s.rdCM.getSpriteRect().size)
+        s.phCM = ph.PhysicsComponent(s)
 
-class particle(obj):
+class Particle(obj):
     def __init__(s, pos, vel, time, color) -> None:
         super().__init__(groups["all", "update", "particle"])
         s.pos = pos
         s.vel = vel
         s.time = time
         s.color = color
-        s.rdCO = rd.RenderComponent(s, 0, offsets["level"])
+        s.rdCM = rd.RenderComponent(s, 0, offsets["level"])
     
     def update(s, dt):
         if s.time < 0:
@@ -94,7 +95,7 @@ class Text(obj):
         s.color = color
         s.pos = topleft
         s.image = s.font.render(text, True, color)
-        s.rdCO = rd.RenderComponent(s, 0, "screen")
+        s.rdCM = rd.RenderComponent(s, 0, offsets["level"])
     
     def set(s, text):
         s.image = s.font.render(text, True, s.color)
@@ -109,38 +110,40 @@ class Jelly(obj):
     def __init__(s, pos):
         super().__init__(groups["all", "update", "jelly"])
 
-        s.rdCO = rd.RenderComponent(s, "jelly idle", offsets["level"])
-        s.rect = pg.Rect(pos.x, pos.y, *s.rdCO.getSpriteRect().size)
-        s.phCO = ph.PhysicsComponent(s, True, 0.7, groups["player", "ground"])
+        s.rdCM = rd.RenderComponent(s, "jelly idle", offsets["level"])
+        s.rect = pg.Rect(pos.x, pos.y, *s.rdCM.getSpriteRect().size)
+        s.phCM = ph.PhysicsComponent(s, True, 0.7, groups["player", "ground"])
         
         s.jumpTimer = 0
+        s.velText = Text("jelly velocity", "Comic Sans MS", WHITE, (10, 40))
         
         def right(key):
-            if s.phCO.onFloor:
-                s.phCO.push(0, 0.4)
+            if s.phCM.onFloor:
+                s.phCM.push(0, 0.4)
             else:
-                s.phCO.push(0, 0.2)
+                s.phCM.push(0, 0.2)
         triggerKeyPress(pg.K_RIGHT, right)
 
         def left(key):
-            if s.phCO.onFloor:
-                s.phCO.push(pi, 0.4)
+            if s.phCM.onFloor:
+                s.phCM.push(pi, 0.4)
             else:
-                s.phCO.push(pi, 0.2)
+                s.phCM.push(pi, 0.2)
         triggerKeyPress(pg.K_LEFT, left)
         
         def jump(key):
-            if s.phCO.onFloor and s.jumpTimer == 0:
+            if s.phCM.onFloor and s.jumpTimer == 0:
                 s.jumpTimer = 3
         triggerKeyPress(pg.K_UP, jump)
 
     def update(s, dt):
         # jump
         if s.jumpTimer > 0:
-            s.phCO.push(3*pi/2, 1.4)
+            s.phCM.push(3*pi/2, 1.4)
             s.jumpTimer -= dt
             if s.jumpTimer < 0:
                 s.jumpTimer = 0
-        s.rdCO.update(dt)
-        s.phCO.push(pi/2, 1)
-        s.phCO.update(dt)
+        s.rdCM.update(dt)
+        s.phCM.push(pi/2, 1)
+        s.phCM.update(dt)
+        s.velText.set(f"Jelly:   {s.phCM.vel.x:.4f}" + " " + f"{s.phCM.vel.y:.4f}")

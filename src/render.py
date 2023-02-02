@@ -108,14 +108,14 @@ class RenderSystem:
 	def update(s, dt):
 		for o in offsets.values():
 			o[0].x += (o[1].rect.x-o[0].x -
-						WIN_WIDTH/2+o[1].rect.width/2)/3 * dt
+						WIN_WIDTH/2+o[1].rect.width/2)/3# * dt
 			o[0].y += (o[1].rect.y-o[0].y -
-						WIN_HEIGHT/2+o[1].rect.height/2)/3 * dt
+						WIN_HEIGHT/2+o[1].rect.height/2)/3# * dt
 
 	def render(s, screen, objects):
 		for obj in objects:
-			if obj.rdCO.animation == "custom":
-				obj.draw(screen, obj.rdCO.offset[0])
-			elif not obj.rdCO.stopAnimation:
-				screen.blit(obj.rdCO.animation.images[obj.rdCO.currentTexture], (
-					obj.rect.x-obj.rdCO.offset[0].x, obj.rect.y-obj.rdCO.offset[0].y))
+			if obj.rdCM.animation == "custom":
+				obj.draw(screen, obj.rdCM.offset[0])
+			elif not obj.rdCM.stopAnimation:
+				screen.blit(obj.rdCM.animation.images[obj.rdCM.currentTexture], (
+					obj.rect.x-obj.rdCM.offset[0].x, obj.rect.y-obj.rdCM.offset[0].y))

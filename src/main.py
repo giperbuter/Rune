@@ -4,10 +4,10 @@ import data as da
 import render as rd
 import IO as io
 
-# triggers - already wrote which only need to do
+# physics triggers - collide with group and/or side
 # sound system - start with research and move from there
-# particles - texture and square and polygon support
-# jelly ai
+# jelly ai - A*?
+# fix collidion - use the one in my notebook(the collsion detection rect is streched from before to after the assignment of the new position seperetly by x and y)
 
 class Main:
     def __init__(s):
@@ -29,6 +29,14 @@ class Main:
             if event.type == pg.MOUSEWHEEL:
                 for f in triggers["mouse scroll"]:
                     f(vec(event.x, event.y))
+            # mouse button down
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button in triggers["mouse button down"]:
+                    triggers["mouse button down"][event.button](event.button)
+            # mouse button up
+            if event.type == pg.MOUSEBUTTONUP:
+                if event.button in triggers["mouse button up"]:
+                    triggers["mouse button up"][event.button](event.button)
             # key down
             elif event.type == pg.KEYDOWN:
                 if event.key in triggers["key down"]:
@@ -47,9 +55,6 @@ class Main:
             if keys[k]:
                 triggers["key press"][k](k)
 
-        #multiple keys
-        #key press/up/down
-        #muse
 
     def update(s, dt):
         for obj in groups["update"]:
@@ -68,12 +73,10 @@ class Main:
                 s.update(frameTime)
                 frameTime -= deltaTime;
             
-            
             s.screen.fill((0, 0, 0))
             s.rdSY.render(s.screen, groups["all"])
             pg.display.flip()
-            
-            pg.display.set_caption(f"{frameTime:.2f}")
+            # pg.display.set_caption(f"{deltaTime:.2f}")
 
 
 main = Main()

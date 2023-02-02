@@ -5,7 +5,6 @@ from data import *
 # angle between two vectors in radians:
 # acos(v1.normalize().dot(v2.normalize()))
 
-
 class PhysicsComponent():
   def __init__(s, obj, dynamic = False, mass = 1, collideGroups=[], frictionGroups={"air": -0.7}):
     s.obj = obj
@@ -18,6 +17,12 @@ class PhysicsComponent():
     s.collideGroups = collideGroups
     s.frictionGroups = frictionGroups
     s.collided = []
+    s.triggers = {}
+  
+  # func(obj, group, side)
+  # side: 0-any 1-top 2-right 3-bottom 4-left
+  def trigger(s, group, side, func):
+    s.triggers[[group, side]] = func
 
   def push(s, angle, vel):
     force = vec(0, 0)
@@ -27,9 +32,6 @@ class PhysicsComponent():
       
   def pushV(s, vec):
     s.frc += vec
-  
-  # def gravity(s, dir, strength):
-  #   s.frc += dir * strength
 
   def collide(s):
     s.obj.rect.left = s.pos.x
@@ -37,9 +39,9 @@ class PhysicsComponent():
       if hits := pg.sprite.spritecollide(s.obj, g, False):
         s.collided.append(g)
         dyn = False
-        if hits[0].phCO.dyn:
-          s.vel.x = ((hits[0].phCO.mas * hits[0].phCO.vel.x) + (s.mas * s.vel.x)) / (hits[0].phCO.mas + s.mas)
-          hits[0].phCO.vel.x = s.vel.x
+        if hits[0].phCM.dyn:
+          s.vel.x = ((hits[0].phCM.mas * hits[0].phCM.vel.x) + (s.mas * s.vel.x)) / (hits[0].phCM.mas + s.mas)
+          hits[0].phCM.vel.x = s.vel.x
           dyn = True
         
         if s.vel.x > 0:  # right
@@ -60,9 +62,9 @@ class PhysicsComponent():
       if hits := pg.sprite.spritecollide(s.obj, g, False):
         s.collided.append(g)
         dyn = False
-        if hits[0].phCO.dyn:
-          s.vel.y = ((hits[0].phCO.mas * hits[0].phCO.vel.y) + (s.mas * s.vel.y)) / (hits[0].phCO.mas + s.mas)
-          hits[0].phCO.vel.y = s.vel.y
+        if hits[0].phCM.dyn:
+          s.vel.y = ((hits[0].phCM.mas * hits[0].phCM.vel.y) + (s.mas * s.vel.y)) / (hits[0].phCM.mas + s.mas)
+          hits[0].phCM.vel.y = s.vel.y
           dyn = True
      
         if s.vel.y > 0:  # down
@@ -93,7 +95,5 @@ class PhysicsComponent():
     s.onFloor = False
     s.collided = []
     s.collide()
-    # collide with groups
-    # collide side and groups
 
     s.frc = vec(0, 0)
