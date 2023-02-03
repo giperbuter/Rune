@@ -7,10 +7,6 @@ import data as da
 import objects as ob
 import random as ra
 
-# call pos once at the end and the create func is created before it depending on the type(with default error type)
-
-#{"type": "text", "pos": {"pos": [10, 10], "grid": false}, "text": "hello world!", "font": "Comic Sans MS", "color": [255, 255, 255]},
-
 def importLevel(path):
 	level = json.load(open(op.join("data/json/", path)))
 	for o in level:
@@ -33,8 +29,14 @@ def importLevel(path):
 					
 		# player
 		if o["type"] == "player":
-			pos(lambda pos : ob.Player(pos))
-			if o["main"]: offsets["level"][1] = groups["player"].sprites()[-1]
+			def call(pos):
+				pl = ob.Player(pos)
+				offsets["level"][0].x = pos.x  - WIN_WIDTH/2+pl.rect.width/2
+				offsets["level"][0].y = pos.y - WIN_HEIGHT/2+pl.rect.height/2
+				print(pos)
+			pos(call)
+			if o["main"]:
+				offsets["level"][1] = groups["player"].sprites()[-1]
 
 		# jelly
 		elif o["type"] == "jelly":
@@ -55,4 +57,3 @@ def importLevel(path):
 			def create(pos):
 				ob.Text(o["text"], o["font"], o["color"], pos)
 			pos(create)
-  #

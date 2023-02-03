@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import List
 import pygame as pg
 
 vec = pg.math.Vector2
@@ -24,28 +24,42 @@ class groups(dict):
         else:
             return super().__getitem__(keys)
 
-triggers = {"key press": {}, "key down": {}, "key up": {}, "mouse move": [], "mouse scroll": [], "mouse button up": {}, "mouse button down": {}}
-# func(key)
-def triggerKeyPress(key, func):
-    triggers["key press"][key] = func
-# func(key)
-def triggerKeyDown(key, func):
-    triggers["key down"][key] = func
-# func(key)
-def triggerKeyUp(key, func):
-    triggers["key up"][key] = func
-# func(button)
-def triggerMouseButtonDown(button, func):
-    triggers["mouse button down"][button] = func
-# func(button)
-def triggerMouseButtonUp(button, func):
-    triggers["mouse button up"][button] = func
-# func(pos: vec(x, y))
-def triggerMouseMove(func):
-    triggers["mouse move"].append(func)
-# func(scroll: vec(x, y))
-def triggerMouseScroll(func):
-    triggers["mouse scroll"].append(func)
+onEvent = {}
+def triggerOnEvent(event, call):
+    if event in onEvent.keys():
+        onEvent[event].append(call)
+    else:
+        onEvent[event] = [call]
+
+onKeyPress = {}
+def triggerOnKeyPress(key, call):
+    if key in onKeyPress.keys():
+        onKeyPress[key].append(call)
+    else:
+        onKeyPress[key] = [call]
+
+# triggers = {"key press": {}, "key down": {}, "key up": {}, "mouse move": [], "mouse scroll": [], "mouse button up": {}, "mouse button down": {}}
+# # func(key)
+# def triggerKeyPress(key, func):
+#     triggers["key press"][key] = func
+# # func(key)
+# def triggerKeyDown(key, func):
+#     triggers["key down"][key] = func
+# # func(key)
+# def triggerKeyUp(key, func):
+#     triggers["key up"][key] = func
+# # func(button)
+# def triggerMouseButtonDown(button, func):
+#     triggers["mouse button down"][button] = func
+# # func(button)
+# def triggerMouseButtonUp(button, func):
+#     triggers["mouse button up"][button] = func
+# # func(pos: vec(x, y))
+# def triggerMouseMove(func):
+#     triggers["mouse move"].append(func)
+# # func(scroll: vec(x, y))
+# def triggerMouseScroll(func):
+#     triggers["mouse scroll"].append(func)
 
 groups = groups("all", "update", "player", "ground", "jelly", "particle", "text")
 currentPlayer = None

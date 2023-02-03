@@ -75,8 +75,6 @@ class RenderComponent:
 
 class RenderSystem:
 	def __init__(s):
-		s.scroll = vec(0, 0)
-  
 		animations["ghost idle"] = Animation(
 			importImages(["ghost/idle-1.png"], 40, 54), 0, False)
 		animations["ghost left"] = Animation(
@@ -108,9 +106,9 @@ class RenderSystem:
 	def update(s, dt):
 		for o in offsets.values():
 			o[0].x += (o[1].rect.x-o[0].x -
-						WIN_WIDTH/2+o[1].rect.width/2)/3# * dt
+						WIN_WIDTH/2+o[1].rect.width/2) * 0.0075
 			o[0].y += (o[1].rect.y-o[0].y -
-						WIN_HEIGHT/2+o[1].rect.height/2)/3# * dt
+						WIN_HEIGHT/2+o[1].rect.height/2) * 0.0075
 
 	def render(s, screen, objects):
 		for obj in objects:
