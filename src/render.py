@@ -82,11 +82,11 @@ class RenderSystem:
 		animations["ghost right"] = Animation(
 			importImages(["ghost/right-1.png"], 40, 54), 0, False)
 		animations["jelly idle"] = Animation(importImages(
-			["jelly/idle/"+str(i)+".png" for i in range(1, 16)], 32, 32, True), 0.3, False)
+			["jelly/idle/"+str(i)+".png" for i in range(1, 16)], 32, 32, True), 0.03, False)
 		animations["jelly left"] = Animation(importImages(
-			["jelly/left/"+str(i)+".png" for i in range(1, 16)], 32, 32, True), 0.2, False)
+			["jelly/left/"+str(i)+".png" for i in range(1, 16)], 32, 32, True), 0.03, False)
 		animations["jelly right"] = Animation(importImages(
-			["jelly/right/"+str(i)+".png" for i in range(1, 16)], 32, 32, True), 0.2, False)
+			["jelly/right/"+str(i)+".png" for i in range(1, 16)], 32, 32, True), 0.03, False)
 		animations["ground-1"] = Animation(
 			importImages(["ground/grass-1.png"]), 0, False)
 		animations["ground-2"] = Animation(
@@ -106,14 +106,14 @@ class RenderSystem:
 	def update(s, dt):
 		for o in offsets.values():
 			o[0].x += (o[1].rect.x-o[0].x -
-						WIN_WIDTH/2+o[1].rect.width/2) * 0.0075
+						WIN_WIDTH/2+o[1].rect.width/2) * 0.075
 			o[0].y += (o[1].rect.y-o[0].y -
-						WIN_HEIGHT/2+o[1].rect.height/2) * 0.0075
+						WIN_HEIGHT/2+o[1].rect.height/2) * 0.075
 
 	def render(s, screen, objects):
 		for obj in objects:
-			if obj.rdCM.animation == "custom":
-				obj.draw(screen, obj.rdCM.offset[0])
-			elif not obj.rdCM.stopAnimation:
-				screen.blit(obj.rdCM.animation.images[obj.rdCM.currentTexture], (
-					obj.rect.x-obj.rdCM.offset[0].x, obj.rect.y-obj.rdCM.offset[0].y))
+			if obj.renderComponent.animation == "custom":
+				obj.draw(screen, obj.renderComponent.offset[0])
+			elif not obj.renderComponent.stopAnimation:
+				screen.blit(obj.renderComponent.animation.images[obj.renderComponent.currentTexture], (
+					obj.rect.x-obj.renderComponent.offset[0].x, obj.rect.y-obj.renderComponent.offset[0].y))

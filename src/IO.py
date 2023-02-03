@@ -33,7 +33,6 @@ def importLevel(path):
 				pl = ob.Player(pos)
 				offsets["level"][0].x = pos.x  - WIN_WIDTH/2+pl.rect.width/2
 				offsets["level"][0].y = pos.y - WIN_HEIGHT/2+pl.rect.height/2
-				print(pos)
 			pos(call)
 			if o["main"]:
 				offsets["level"][1] = groups["player"].sprites()[-1]

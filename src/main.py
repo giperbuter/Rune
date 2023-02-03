@@ -17,9 +17,7 @@ class Main:
         s.screen = pg.display.set_mode(
             (WIN_WIDTH, WIN_HEIGHT), pg.HWSURFACE | pg.DOUBLEBUF)
         s.running = True
-        s.elapsed = 1 / 60.0
-        s.currentTime = pg.time.get_ticks() / 100.0
-        s.rdSY = rd.RenderSystem()
+        s.renderSystem = rd.RenderSystem()
         io.importLevel("level1.json")
         triggerOnKeyPress(pg.K_ESCAPE, lambda k: s.stop())
 
@@ -28,35 +26,33 @@ class Main:
 
     def inputs(s):
         while event := pg.event.poll():
-            if event in onEvent.keys():
-                [call(event) for call in onEvent[event]]
+            if event.type in onEvent.keys():
+                [call(event) for call in onEvent[event.type]]
+            if event.type == pg.QUIT:
+                s.stop()
 
         keys = pg.key.get_pressed()
         for k in onKeyPress.keys():
             if keys[k]:
-                onKeyPress[k](k)
+                [call(k) for call in onKeyPress[k]]
 
     def update(s, dt):
         for obj in groups["update"]:
             obj.update(dt)
-        s.rdSY.update(dt)
+        s.renderSystem.update(dt)
 
     def run(s):
+        clock = pg.time.Clock()
         while s.running:
-            newTime = pg.time.get_ticks() / 100.0
-            frameTime = newTime - s.currentTime
-            s.currentTime = newTime
-
-            while frameTime > 0.0:
-                deltaTime = min(frameTime, s.elapsed)
-                s.inputs()
-                s.update(frameTime)
-                pg.display.set_caption(f"{frameTime}")
-                frameTime -= deltaTime
-
+            s.inputs()
+            s.update(1 / 60)
+            pg.display.set_caption(f"{clock.get_fps()}")
+            
             s.screen.fill((0, 0, 0))
-            s.rdSY.render(s.screen, groups["all"])
+            s.renderSystem.render(s.screen, groups["all"])
             pg.display.flip()
+            
+            clock.tick(60)
 
 
 main = Main()
